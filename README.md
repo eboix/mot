@@ -1,7 +1,17 @@
-# Code for _Polynomial-time algorithms for Multimarginal Optimal Transport Problems with structure_
+## _Polynomial-time algorithms for Multimarginal Optimal Transport Problems with structure_
 
 This repository contains the code from [Altschuler, Boix-Adsera](https://arxiv.org/abs/2008.03006) for solving structured MOT problems.
-Instead of using the Ellipsoid method, we use Column generation in our practical implementations, as described in the paper.
+
+We implement the following algorithms:
+* naive LP solver
+* Sinkhorn (both naive and efficient)
+* Multiplicative Weights Update (MWU)
+* Column Generation (COLGEN)
+
+We provide code for the following MOT applications:
+* generalized Euler flows
+* adversarial network reliability
+* risk estimation
 
 NB: Our focus in writing this code was clarity over speed. Much further optimization can certainly be done.
 
@@ -9,23 +19,12 @@ NB: Our focus in writing this code was clarity over speed. Much further optimiza
 
 1. Clone the Github repository.
 <!-- ```
-git clone https://github.com/eboix/[TODO]
+git clone https://github.com/eboix/mot
 ``` -->
 
-2. Using the [Anaconda](https://docs.anaconda.com/anaconda/install/) package manager, run:
+2. Install Gurobi and its Python extension, `gurobipy` (https://www.gurobi.com/documentation/9.1/quickstart_mac/cs_python.html)
 
-```
-conda install -c conda-forge matplotlib
-conda install -c conda-forge scikit-learn
-```
-
-3. Install [PuLP](https://github.com/coin-or/pulp):
-`python -m pip install pulp`
-
-4. Install disjoint set:
-`python -m pip install disjoint-set`
-
-<!-- 4. `example_barycenter_computation.py` provides example usage of our code. [TODO]-->
+3. Example use of the code to recreate the plots in the paper is in `generalized_euler_flows.py`, `network_reliability.py`, and `risk_estimation.py`
 
 ## License
 

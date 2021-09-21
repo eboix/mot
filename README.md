@@ -24,7 +24,10 @@ git clone https://github.com/eboix/mot
 
 2. Install Gurobi and its Python extension, `gurobipy` (https://www.gurobi.com/documentation/9.1/quickstart_mac/cs_python.html)
 
-3. Example use of the code to recreate the plots in the paper is in `generalized_euler_flows.py`, `network_reliability.py`, and `risk_estimation.py`
+3. Install disjoint set:
+`python -m pip install disjoint-set`
+
+4. Example use of the code to recreate the plots in the paper is in `generalized_euler_flows.py`, `network_reliability.py`, and `risk_estimation.py`
 
 ## License
 

@@ -28,7 +28,7 @@ git clone https://github.com/eboix/mot
 `python -m pip install disjoint-set`
 
 4. To replicate the fluid dynamics plots in the paper, run `generalized_euler_flows.py`.
-The iPython notebook `generate_plots.ipynb` contains instructions to replicate our scalability and accuracy comparisons on the network reliability and risk estimation problems. 
+The IPython notebook `generate_plots.ipynb` contains instructions to replicate our scalability and accuracy comparisons on the network reliability and risk estimation problems. 
 
 ## License
 

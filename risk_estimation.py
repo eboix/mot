@@ -10,6 +10,8 @@ from disjoint_set import DisjointSet
 import random
 import math
 import copy
+import os
+import pickle
 import scipy.special
 
 
@@ -198,27 +200,26 @@ import matplotlib.pyplot as plt
 
 def main():
 
-    mw_eps_list = [0.005]
+    data_file = 'risk_estimation_data.pkl'
+    if not os.path.exists(data_file):
+        pickle.dump({}, open(data_file, 'wb'))
+    run_data = pickle.load(open(data_file, 'rb'))
+
+    mw_eps_list = [0.02,0.01]
     naive_sinkhorn_eta_list = [200]
     sinkhorn_eta_list = [200]
     do_colgen = True
     do_naive = True
-    run_data = {}
 
-    mw_eps_list = []
-    naive_sinkhorn_eta_list = []
-    sinkhorn_eta_list = [200]
-    do_colgen = True
-    do_naive = False
-    run_data = {}
+    appx_degree=5
+    eta_cutting_plane = 1 # For implementing the AMIN oracle approximately (for MWU and COLGEN)
 
     # for k in [2,3,4,5,6,7,8,9,10,11,12,14,16,18,20,25,30,40,50]:
-    for k in [10]:
+    for k in [2,3,4,5]:
 
         n = 10
-        appx_degree=5
-        eta = 1
 
+        # A) Set up problem
         # Dataset where the marginal return distribution on a time step is uniform in [1, 1 + 1/k]
         ratio_dists = []
         for i in range(k):
@@ -227,8 +228,9 @@ def main():
                 ratio_dists[i].append((1 + j/(k*n), 1/n))
 
 
+        # B) Solve problem
         prob=RiskEstimationProblem(ratio_dists,appx_degree)
-        prob.set_cutting_plane_eta(eta)
+        prob.set_cutting_plane_eta(eta_cutting_plane)
         print(prob.get_cost_range())
         # assert(False)
 
@@ -252,24 +254,7 @@ def main():
             time_sinkhorn = endtime-starttime
 
             print('Total time sinkhorn:',time_sinkhorn)
-
-
             obj_sinkhorn = prob.appx_sinkhorn_cost_fast(eta, p, rankone)
-
-            # """
-            # We compute the empirical mean of the Sinkhorn solution value from samples. This adds a lot of time to the cost of
-            # computing the Sinkhorn solution. E.g., it may take 20x as much time to compute a small confidence interval around the value
-            # of the Sinkhorn solution as to compute the Sinkhorn map. Thus, we limit the Sinkhorn running time to about 30 seconds, so that the confidence
-            # interval calculation takes about 10 minutes.
-            # """
-            # start_obj_computation = time.time()
-            # obj_sinkhorn, conf_interval = prob.estimate_rounded_sinkhorn_solution_cost(eta, p, rankone, num_trials=1000, naive=False)
-            # print(conf_interval)
-            # end_obj_computation = time.time()
-            # time_obj_computation = end_obj_computation - start_obj_computation
-            # print('Total time sinkhorn computing objective:',time_obj_computation)
-
-
             print('Objective sinkhorn:',obj_sinkhorn)
             run_data[(n,k,'sinkhorn' + str(eta))] = (obj_sinkhorn, time_sinkhorn)
 
@@ -305,8 +290,7 @@ def main():
             run_data[(n,k,'naive')] = (obj_naive, time_naive)
 
         print('run_data = ',run_data)
-        for l in run_data.items():
-            print(l)
+        pickle.dump(run_data, open(data_file, 'wb'))
 
 if __name__ == '__main__':
     main()

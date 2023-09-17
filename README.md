@@ -17,18 +17,14 @@ NB: Our focus in writing this code was clarity over speed. Much further optimiza
 
 ## Installation
 
-1. Clone the Github repository.
-<!-- ```
-git clone https://github.com/eboix/mot
-``` -->
+1. Clone the Github repository: `git clone https://github.com/eboix/mot`
 
 2. Install Gurobi and its Python extension, `gurobipy` (https://www.gurobi.com/documentation/9.1/quickstart_mac/cs_python.html)
 
-3. Install disjoint set:
-`python -m pip install disjoint-set`
+3. Install disjoint set: `python -m pip install disjoint-set`
 
 4. To replicate the fluid dynamics plots in the paper, run `generalized_euler_flows.py`.
-The IPython notebook `generate_plots.ipynb` contains instructions to replicate our scalability and accuracy comparisons on the network reliability and risk estimation problems. 
+The IPython notebook `generate_plots.ipynb` contains instructions to replicate our scalability and accuracy comparisons on the network reliability and risk estimation problems.
 
 ## License
 

@@ -1,7 +1,10 @@
 # General multimarginal optimal transport problem solved using column generation.
 from pulp import * ## import pulp-or functions
-import gurobipy as gp
-from gurobipy import GRB
+try:
+    import gurobipy as gp
+    from gurobipy import GRB
+except:
+    print('WARNING: Unable to import gurobipy. Please install if running column generation or naive solver.')
 import numpy as np
 import time
 from functools import partial
@@ -746,7 +749,6 @@ class MOTProblem:
 
     def compute_rounded_sinkhorn_solution_cost_naive(self, eta, p, rankone):
         ranges = [range(n) for n in self.ns]
-        curriter = 0
         totprob = 0
         totcost = 0
         for tup in itertools.product(*ranges):
@@ -760,6 +762,21 @@ class MOTProblem:
             totcost += currcost * currprob
         assert(abs(totprob - 1) < 1e-5)
         return totcost
+
+    def get_rounded_sinkhorn_solution_probability_tensor(self, eta, p, rankone):
+        prob_tensor = np.zeros(self.ns)
+        ranges = [range(n) for n in self.ns]
+        totprob = 0
+        for tup in itertools.product(*ranges):
+            weighting = np.sum([p[j][tup[j]] for j in range(self.k)])
+            currcost = self.get_tuple_cost(tup)
+            currprob = np.exp(eta * weighting - eta * currcost)
+            rankonecurrprob = np.prod([rankone[i][tup[i]] for i in range(self.k)])
+            currprob += rankonecurrprob
+            prob_tensor[tup] = currprob
+            totprob += currprob
+        assert(abs(totprob - 1) < 1e-5)
+        return prob_tensor
 
     def get_pairwise_marginal(self, eta, p, rankone, i1, i2):
         pcopy = copy.deepcopy(p)
